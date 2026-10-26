@@ -41,7 +41,7 @@ const visible = computed(() => {
         placeholder="Search title or location"
         aria-label="Search"
       />
-      <select aria-label="Category">
+      <select v-model="category" aria-label="Category">
         <option value="all">All categories</option>
         <option value="talk">Talks</option>
         <option value="workshop">Workshops</option>

@@ -3,7 +3,9 @@ import { computed, ref, watch } from "vue";
 import EventList from "./components/EventList.vue";
 import { initialEvents } from "./data/events";
 import type { CampusEvent } from "./types";
-
+import { seatsLeft } from "./format";
+const STORAGE_KEY = "campus-events-bookings";
+      
 // A reactive copy of the hard-coded events
 const events = ref<CampusEvent[]>(initialEvents.map(e => ({ ...e })));
 

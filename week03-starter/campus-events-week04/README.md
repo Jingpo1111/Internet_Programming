@@ -1,22 +1,23 @@
 # Week 4 practice: Vue components and reactivity
 
-Campus Events, the reference app we build together in practice sessions.
-This week it runs on hard-coded data (`src/data/events.ts`).
+# Question
 
-Requires Node 24 LTS (npm 11).
+## 1. In EventList, what goes wrong if you use the array index as :key and the list gets filtered while a card has local state (for example an open details panel)?
 
-```bash
-npm install
-npm run dev     # open http://localhost:5173
-npm test        # component tests (Vitest + Vue Test Utils)
-npm run check   # type-check .ts and .vue files
-```
+## - Index as key: After filtering, the positions shift, so Vue reuses the wrong card instance. Local state like an open panel then shows on a different event. Use e.id so each card keeps its own state.
 
-Work through the TODOs in this order:
+## 2. Why is visible a computed and not a function called from the template? What is the difference when you type in the search box?
 
-1. `src/components/EventCard.vue`: props, emits, computed, v-if, class and attribute bindings
-2. `src/components/EventList.vue`: v-model, computed filtering, v-for with keys, passing events up
-3. `src/App.vue`: state that changes when you book; bonus: watch + localStorage
+## - Computed vs function: A computed is cached and recalculates only when search, category or events change. A function in the template runs on every re-render. Typing in the search box changes search, so the computed recalculates once per keystroke.
 
-You are done when `npm test` passes (15 tests) and `npm run check` shows no errors.
-The last App test ("keeps my bookings after a reload") is the bonus.
+## 3. EventCard emits book instead of changing event.booked. Give two reasons.
+
+## -Why emit book: Props are read-only, so a child must not change them. App owns the data and the booking rules, and the card only reports that the user wants to book.
+
+## 4. You write const { booked } = reactive(event); booked++. The page does not change.Why?
+
+## - Destructuring: const { booked } = reactive(event) copies the number into a plain variable that Vue cannot track. booked++ changes only that copy, so the page stays the same. Use event.booked++ instead.
+
+## 5. Where does myBookings live, and why not in EventCard or EventList?
+
+## - myBookings: It lives in App.vue because App owns the events and the header needs the count. EventCard and EventList can’t share it, and the state would be lost if either was re-created.
