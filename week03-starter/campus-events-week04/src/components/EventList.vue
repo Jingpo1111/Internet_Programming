@@ -33,7 +33,12 @@ const visible = computed(() => {
   <section>
     <div class="filters">
       <!-- TODO 4: bind the input and the select to your refs with v-model -->
-      <input type="search" placeholder="Search title or location" aria-label="Search" />
+      <input
+        v-model="search"
+        type="search"
+        placeholder="Search title or location"
+        aria-label="Search"
+      />
       <select aria-label="Category">
         <option value="all">All categories</option>
         <option value="talk">Talks</option>
@@ -44,12 +49,19 @@ const visible = computed(() => {
     </div>
 
     <!-- TODO 5: show "<visible count> of <total> events" -->
-    <p class="count">6 of 6 events</p>
+    <p class="count">{{ visible.length }} of {{ events.length }} events</p>
 
     <!-- TODO 6: render one EventCard per visible event (v-for with a :key),
          pass the event as a prop and pass its "book" event up.
          When nothing is visible, show the empty message instead (v-if / v-else). -->
-    <div class="grid"></div>
+    <div v-if="visible.length" class="grid">
+      <EventCard
+        v-for="e in visible"
+        :key="e.id"
+        :event="e"
+        @book="emit('book', $event)"
+      />
+    </div>
     <p class="empty">No events match your search.</p>
   </section>
 </template>
